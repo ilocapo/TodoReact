@@ -1,6 +1,4 @@
 import { Trash } from "lucide-react";
-import { useEffect, useState } from "react";
-
 
 type Priority = "Urgente" | "Moyenne" | "Basse"
 
