@@ -158,6 +158,37 @@ deploy: build ## Prépare l'application pour le déploiement
 	@echo "   - Ou tout autre hébergeur statique"
 	@echo ""
 
+# Déploiement GitHub Pages
+.PHONY: github-pages
+github-pages: build ## Déploie sur GitHub Pages
+	@echo "$(BLUE)🚀 Déploiement sur GitHub Pages...$(NC)"
+	@if command -v gh-pages >/dev/null 2>&1; then \
+		gh-pages -d $(DIST); \
+		echo "$(GREEN)✅ Déployé sur GitHub Pages!$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠️  gh-pages n'est pas installé. Installation...$(NC)"; \
+		npm install -g gh-pages; \
+		gh-pages -d $(DIST); \
+		echo "$(GREEN)✅ Déployé sur GitHub Pages!$(NC)"; \
+	fi
+
+# Initialisation Git pour GitHub Pages
+.PHONY: git-init
+git-init: ## Initialise le repository Git pour GitHub Pages
+	@echo "$(BLUE)🔧 Initialisation Git...$(NC)"
+	@if [ ! -d ".git" ]; then \
+		git init; \
+		echo "$(GREEN)✅ Repository Git initialisé$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠️  Repository Git déjà initialisé$(NC)"; \
+	fi
+	@echo "$(YELLOW)💡 N'oubliez pas de:$(NC)"
+	@echo "   1. git add ."
+	@echo "   2. git commit -m 'Initial commit'"
+	@echo "   3. git remote add origin <votre-repo-url>"
+	@echo "   4. git push -u origin main"
+	@echo ""
+
 # Affichage des statistiques
 .PHONY: stats
 stats: ## Affiche les statistiques du projet
@@ -188,3 +219,11 @@ p: preview  ## Raccourci pour 'preview'
 l: lint     ## Raccourci pour 'lint'
 c: clean    ## Raccourci pour 'clean'
 r: run      ## Raccourci pour 'run'
+
+# Test local du build GitHub Pages
+.PHONY: test-github-pages
+test-github-pages: build ## Teste le build localement comme sur GitHub Pages
+	@echo "$(BLUE)🧪 Test local du build GitHub Pages...$(NC)"
+	@echo "$(YELLOW)💡 Serveur local qui simule GitHub Pages$(NC)"
+	@cd $(DIST) && python3 -m http.server 8080 || python -m SimpleHTTPServer 8080
+	@echo "$(GREEN)✅ Ouvrez http://localhost:8080 pour tester$(NC)"

@@ -94,9 +94,65 @@ config/
 
 ## Déploiement
 
+### Build local
 ```bash
 make build
 ```
 
 Le dossier `dist/` contient l'application prête pour le déploiement.
-# TodoReact
+
+### GitHub Pages
+
+#### Configuration automatique
+1. **Pousser le code sur GitHub** dans le branch `main`
+2. **Activer GitHub Pages** :
+   - Aller dans Settings > Pages de votre repository
+   - Source : "GitHub Actions"
+   - Le déploiement se fera automatiquement à chaque push
+
+#### Configuration manuelle
+1. **Builder l'application** :
+   ```bash
+   npm run build
+   ```
+
+2. **Déployer** :
+   ```bash
+   # Installer gh-pages si pas déjà fait
+   npm install -g gh-pages
+   
+   # Déployer le dossier dist
+   gh-pages -d dist
+   ```
+
+3. **Accéder au site** : `https://votre-username.github.io/ToDo/`
+
+#### Diagnostic si le site ne s'affiche pas
+
+1. **Vérifier que GitHub Pages est activé** :
+   - Repository Settings > Pages
+   - Source doit être "GitHub Actions"
+
+2. **Vérifier le workflow** :
+   - Onglet "Actions" de votre repository
+   - Le workflow "Deploy to GitHub Pages" doit être vert
+
+3. **Vérifier l'URL** :
+   - Format : `https://votre-username.github.io/nom-du-repository/`
+   - Remplacer `votre-username` et `nom-du-repository` par vos valeurs
+
+4. **Forcer un nouveau déploiement** :
+   ```bash
+   # Faire un petit changement et pusher
+   git commit --allow-empty -m "Redeploy"
+   git push
+   ```
+
+5. **Vérifier les logs** :
+   - Onglet Actions > Dernière exécution
+   - Regarder les erreurs dans "build" et "deploy"
+
+#### URLs communes
+- **Repository nommé "ToDo"** : `https://username.github.io/ToDo/`
+- **Repository nommé "todo"** : `https://username.github.io/todo/`
+- **Repository avec espaces** : Remplacer par des tirets dans l'URL
